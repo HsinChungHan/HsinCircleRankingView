@@ -42,14 +42,14 @@ public class CircleRankingView: UIView {
   public weak var dataSource: CircleRankingViewDataSource?
   public weak var delegate: CircleRankingViewDelegate?
   lazy var viewModel = makeViewModel()
+  var timer: Timer?
   
   //MARK: - View lifeCycle
   
   override public func draw(_ rect: CGRect) {
     super.draw(rect)
-    TimerManager.shared.dataSource = self
-    TimerManager.shared.delegate = self
-    TimerManager.shared.setupTimer()
+    timer = makeTimer()
+    RunLoop.current.add(timer!, forMode: .common)
   }
 }
 
@@ -78,6 +78,50 @@ extension CircleRankingView {
     }
     let vm = CircleRankingViewVM(rawDataLineModels: lineModels)
     return vm
+  }
+  
+  func makeTimer() -> Timer {
+    guard let dataSource = dataSource else {
+      fatalError("🚨 You have to set dataSource for RankingNodeView first")
+    }
+    let duration = dataSource.circleRankingViewRoundDouration(self)
+    let timer = Timer.init(timeInterval: duration, target: self, selector: #selector(onTimerFires(sender:)), userInfo: nil, repeats: true)
+    return timer
+  }
+  
+  @objc func onTimerFires(sender: Timer) {
+    guard let lineModel = viewModel.lineModelsPopLast(), let dataSource = dataSource else {
+      invalidateTimer()
+      return
+    }
+    //TODO: - 未來要在這邊把 rank 確定起來
+    viewModel.updatePresentedRank(currentLineModel: lineModel)
+    viewModel.presentedRankingNodeView.forEach {
+      $0.doTransationAnimation()
+    }
+    
+    let nodeView = makeRankingNodeView()
+    addSubview(nodeView)
+    let width = dataSource.circleRankingViewRankingNodeViewWidth(self)
+    nodeView.anchor(top: nil, bottom: bottomAnchor, leading: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 20, right: 0), size: .init(width: width, height: width))
+    nodeView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    nodeView.doOpacityAnimation()
+    
+    //這邊要判斷這個 nodeView 是否已經出現過，若已經出現過，則在做完 scaleAndTransation 的動畫要把自己移除。否則就保留，並加入到 presentedLineModels 和 presentedRankingNodeView
+    if viewModel.isCurrentLineModelAlreadyExistInPresentedLineModels {
+      viewModel.willRemoveCurrentNodeView()
+    }else {
+      viewModel.wontRemoveCurrentNodeView()
+      viewModel.appendInPresentedLineModels(lineModel: lineModel)
+      viewModel.appendInPresentedRankingNodeViews(rankingNodeView: nodeView)
+    }
+  }
+  
+  public func invalidateTimer() {
+    if let _ = timer {
+      timer!.invalidate()
+    }
+    timer = nil
   }
 }
 
@@ -166,57 +210,5 @@ extension CircleRankingView: RankingNodeViewDelegate {
   
   func rankingNodeViewTransationAnimationGroupDidStop(_ rankingNodeView: RankingNodeView, anim: CAAnimation) {
   	delegate?.circleRankingViewTransationAnimationGroupDidStop(self, anim: anim)
-  }
-}
-
-//MARK: - TimerManagerDataSource
-
-extension CircleRankingView: TimerManagerDataSource {
-  
-  public func timerManagerTimeInterval(_ timerManager: TimerManager) -> TimeInterval {
-    guard let dataSource = dataSource else {
-      fatalError("🚨 You have to set dataSource for RankingNodeView first")
-    }
-    let duration = dataSource.circleRankingViewRoundDouration(self)
-    return duration
-  }
-}
-
-
-//MARK: - TimerManagerDelegate
-
-extension CircleRankingView: TimerManagerDelegate {
-  
-  public func timerManagerFires(_ timerManager: TimerManager, timer: Timer) {
-    delegate?.circleRankingViewTimerOnFire(self)
-    guard let lineModel = viewModel.lineModelsPopLast(), let dataSource = dataSource else {
-      timer.invalidate()
-      return
-    }
-    //TODO: - 未來要在這邊把 rank 確定起來
-    viewModel.updatePresentedRank(currentLineModel: lineModel)
-    viewModel.presentedRankingNodeView.forEach {
-      $0.doTransationAnimation()
-    }
-    
-    let nodeView = makeRankingNodeView()
-    addSubview(nodeView)
-    let width = dataSource.circleRankingViewRankingNodeViewWidth(self)
-    nodeView.anchor(top: nil, bottom: bottomAnchor, leading: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 20, right: 0), size: .init(width: width, height: width))
-    nodeView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-    nodeView.doOpacityAnimation()
-    
-    //這邊要判斷這個 nodeView 是否已經出現過，若已經出現過，則在做完 scaleAndTransation 的動畫要把自己移除。否則就保留，並加入到 presentedLineModels 和 presentedRankingNodeView
-    if viewModel.isCurrentLineModelAlreadyExistInPresentedLineModels {
-      viewModel.willRemoveCurrentNodeView()
-    }else {
-      viewModel.wontRemoveCurrentNodeView()
-      viewModel.appendInPresentedLineModels(lineModel: lineModel)
-      viewModel.appendInPresentedRankingNodeViews(rankingNodeView: nodeView)
-    }
-  }
-  
-  public func timerManagerInvalidate(_ timerManager: TimerManager) {
-    delegate?.circleRankingViewTimerDidInvalidate(self)
   }
 }
