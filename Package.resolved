@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "HsinUtils",
+        "repositoryURL": "https://github.com/HsinChungHan/HsinUtils.git",
+        "state": {
+          "branch": null,
+          "revision": "8acac6590450f05bd7aa06bdd3b757bc35605968",
+          "version": "1.1.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
