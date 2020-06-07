@@ -12,13 +12,14 @@ import HsinUtils
 //MARK: - CircleRankingViewDataSource
 
 public protocol CircleRankingViewDataSource: AnyObject {
+  typealias LineModelTuple = (id: String, value: String, icon: String)
   
   func circleRankingViewNumberOfItemInRows(_ circleRankingView: CircleRankingView) -> Int
   func circleRankingViewRankingNodeViewWidth(_ circleRankingView: CircleRankingView) -> CGFloat
   func circleRankingViewOpacityDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewTotalDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewScale(_ circleRankingView: CircleRankingView) -> CGFloat
-  func circleRankingViewLineModels(_ circleRankingView: CircleRankingView) -> [LineModel]
+  func circleRankingViewLineModels(_ circleRankingView: CircleRankingView) -> [LineModelTuple]
   func circleRankingViewPadding(_ circleRankingView: CircleRankingView) -> CGFloat
   func circleRankingViewRoundDouration(_ circleRankingView: CircleRankingView) -> TimeInterval
 }
@@ -67,7 +68,14 @@ extension CircleRankingView {
     guard let dataSource = dataSource else {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
-    let lineModels = dataSource.circleRankingViewLineModels(self).reversed() as [LineModel]
+    
+    
+    let lineModelTuples = dataSource.circleRankingViewLineModels(self).reversed()
+    var lineModels = [LineModel]()
+    for tuple in lineModelTuples {
+      let lineModel = LineModel(id: tuple.id, value: Float(tuple.value)!, icon: UIImage(named: tuple.icon)!)
+      lineModels.append(lineModel)
+    }
     let vm = CircleRankingViewVM(rawDataLineModels: lineModels)
     return vm
   }
