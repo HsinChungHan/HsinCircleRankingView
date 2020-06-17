@@ -70,10 +70,11 @@ extension CircleRankingView {
     }
     
     
-    let lineModelTuples = dataSource.circleRankingViewLineModels(self).reversed()
+    let lineModelTuples = dataSource.circleRankingViewLineModels(self)
     var lineModels = [LineModel]()
     for tuple in lineModelTuples {
       if let teamLogo = tuple.teamLogo {
+        print("teamLogo is \(teamLogo)")
         let lineModel = LineModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: UIImage(named: teamLogo)!)
         lineModels.append(lineModel)
       }else {
