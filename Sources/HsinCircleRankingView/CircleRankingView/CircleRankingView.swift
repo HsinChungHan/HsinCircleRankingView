@@ -19,7 +19,7 @@ public protocol CircleRankingViewDataSource: AnyObject {
   func circleRankingViewOpacityDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewTotalDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewScale(_ circleRankingView: CircleRankingView) -> CGFloat
-  func circleRankingViewLineModels(_ circleRankingView: CircleRankingView) -> [(id: String, value: Float, icon: String, teamLogo: UIImage?, description: String)]
+  func circleRankingViewLineModels(_ circleRankingView: CircleRankingView) -> [(id: String, value: Float, icon: String, teamLogo: String?, description: String)]
   func circleRankingViewPadding(_ circleRankingView: CircleRankingView) -> CGFloat
   func circleRankingViewRoundDouration(_ circleRankingView: CircleRankingView) -> TimeInterval
 }
@@ -73,8 +73,14 @@ extension CircleRankingView {
     let lineModelTuples = dataSource.circleRankingViewLineModels(self).reversed()
     var lineModels = [LineModel]()
     for tuple in lineModelTuples {
-      let lineModel = LineModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: tuple.teamLogo)
-      lineModels.append(lineModel)
+      if let teamLogo = tuple.teamLogo {
+        let lineModel = LineModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: UIImage(named: teamLogo)!)
+        lineModels.append(lineModel)
+      }else {
+        let lineModel = LineModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: nil)
+        lineModels.append(lineModel)
+      }
+      
     }
     let vm = CircleRankingViewVM(rawDataLineModels: lineModels)
     return vm
