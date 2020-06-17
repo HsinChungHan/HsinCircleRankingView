@@ -22,6 +22,10 @@ class RankingNodeViewVM {
     return lineModel.icon
   }
   
+  var teamLogo: UIImage? {
+    return lineModel.teamLogo
+  }
+  
   private(set) var rank: Int
   
   var xIndex: Int {

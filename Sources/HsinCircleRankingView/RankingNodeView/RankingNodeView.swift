@@ -39,6 +39,7 @@ class RankingNodeView: UIView {
   weak var dataSource: RankingNodeViewDataSource?
   weak var delegate: RankingNodeViewDelegate?
   lazy var imageLayer = makeImageLayer()
+  lazy var backgroundImageLayer = makeImageLayer()
   lazy var viewModel = makeViewModel()
   
   //MARK: - View lifeCycle
@@ -48,9 +49,11 @@ class RankingNodeView: UIView {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
     let width = dataSource.rankingNodeViewWidth(self)
-    layer.addSublayer(imageLayer)
-    layer.backgroundColor = UIColor.clear.cgColor
-    imageLayer.frame = CGRect(x: 0, y: 0, width: width, height: width)
+    [backgroundImageLayer, imageLayer].forEach {
+      layer.addSublayer($0)
+      layer.backgroundColor = UIColor.clear.cgColor
+      $0.frame = CGRect(x: 0, y: 0, width: width, height: width)
+    }
   }
 }
 
@@ -70,6 +73,24 @@ extension RankingNodeView {
     layoutIfNeeded()
     layer.contentsGravity = .resizeAspect
     layer.backgroundColor = UIColor.clear.cgColor
+    layer.isGeometryFlipped = true
+    layer.borderColor = UIColor.white.cgColor
+    layer.borderWidth = 5.0
+    layer.cornerRadius = width / 2
+    layer.masksToBounds = true
+    return layer
+  }
+  
+  fileprivate func makeBackgroundImageLayer() -> CALayer {
+    guard let dataSource = dataSource else {
+      fatalError("🚨 You have to set dataSource for RankingNodeView first")
+    }
+    let width = dataSource.rankingNodeViewWidth(self)
+    let teamLogo = viewModel.teamLogo
+    let layer = CALayer()
+    layer.contents = teamLogo?.cgImage
+    layoutIfNeeded()
+    layer.contentsGravity = .resizeAspect
     layer.isGeometryFlipped = true
     layer.borderColor = UIColor.white.cgColor
     layer.borderWidth = 5.0
