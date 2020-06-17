@@ -121,13 +121,17 @@ extension RankingNodeView {
   
   func doOpacityAnimation() {
     let animation = makeOpacityAnimationGroup()
-    imageLayer.add(animation, forKey: "opacityAnimation")
+    [backgroundImageLayer, imageLayer].forEach {
+    	$0.add(animation, forKey: "opacityAnimation")
+    }
   }
   
   func doTransationAnimation() {
     //layer.removeAllAnimations()
     let animation = makeTransationGroup()
-    imageLayer.add(animation, forKey: "transationAnimationGroup")
+    [backgroundImageLayer, imageLayer].forEach {
+      $0.add(animation, forKey: "transationAnimationGroup")
+    }
   }
 }
 
@@ -228,7 +232,9 @@ extension RankingNodeView: CAAnimationDelegate {
     
     if groupId == "OpacityGroup" {
       let animationGroup = makeScaleAndTransationAnimationGroup()
-      imageLayer.add(animationGroup, forKey: "animationGroup")
+      [backgroundImageLayer, imageLayer].forEach {
+        $0.add(animationGroup, forKey: "animationGroup")
+      }
       delegate?.rankingNodeViewOpacityGroupDidStop(self, anim: anim)
     }
     
