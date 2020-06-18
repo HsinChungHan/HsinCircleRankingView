@@ -9,21 +9,21 @@
 import UIKit
 
 class RankingNodeViewVM {
-  private(set) var lineModel: CircleNodeModel
+  private(set) var circleNodeModel: CircleNodeModel
   let scaleWidth: CGFloat
   let numberOfRows: Int
   let padding: CGFloat
   
   var id: String {
-    return lineModel.id
+    return circleNodeModel.id
   }
   
   var icon: UIImage {
-    return lineModel.icon
+    return circleNodeModel.icon
   }
   
   var teamLogo: UIImage? {
-    return lineModel.teamLogo
+    return circleNodeModel.teamLogo
   }
   
   private(set) var rank: Int
@@ -36,38 +36,42 @@ class RankingNodeViewVM {
     return rank / numberOfRows
   }
   
-  private(set) var xFromValue: CGFloat
-  var xToValue: CGFloat {
+  private(set) var xRankingOrderFromValue: CGFloat
+  var xRankingOrderToValue: CGFloat {
     //0.5 是指一半的 width
     return (CGFloat(xIndex) + 0.5) * scaleWidth + CGFloat(xIndex + 1) * padding
   }
   
-  private(set) var yFromValue: CGFloat
-  var yToValue: CGFloat {
+  private(set) var yRankingOrderFromValue: CGFloat
+  var yRankingOrderToValue: CGFloat {
     return (CGFloat(yIndex) + 0.5) * scaleWidth + CGFloat(yIndex + 1) * padding
   }
   
   
-  init(lineModel: CircleNodeModel, numberOfItems: Int, scaleWidth: CGFloat, xFromValue: CGFloat, yFromValue: CGFloat, padding: CGFloat) {
-    self.lineModel = lineModel
-    self.rank = lineModel.rank
+  init(circleNodelModel: CircleNodeModel, numberOfItems: Int, scaleWidth: CGFloat, xFromValue: CGFloat, yFromValue: CGFloat, padding: CGFloat) {
+    self.circleNodeModel = circleNodelModel
+    self.rank = circleNodelModel.rank
     self.scaleWidth = scaleWidth
     self.numberOfRows = numberOfItems
-    self.xFromValue = xFromValue
-    self.yFromValue = yFromValue
+    self.xRankingOrderFromValue = xFromValue
+    self.yRankingOrderFromValue = yFromValue
     self.padding = padding
   }
   
+  func updateXFromValue(fromValue: CGFloat) {
+    self.xRankingOrderFromValue = fromValue
+  }
+  
   func updateXYFromValue() {
-    self.xFromValue = xToValue
-    self.yFromValue = yToValue
+    self.xRankingOrderFromValue = xRankingOrderToValue
+    self.yRankingOrderFromValue = yRankingOrderToValue
   }
   
   func setRank(_ rank: Int) {
     self.rank = rank
   }
   
-  func setLineModel(_ lineModel: CircleNodeModel) {
-    self.lineModel = lineModel
+  func setCircleNodeModel(_ circleNodeModel: CircleNodeModel) {
+    self.circleNodeModel = circleNodeModel
   }
 }

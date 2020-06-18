@@ -80,7 +80,7 @@ class CircleRankingViewVM {
       for (index, model) in presentedCircleNodeModels.enumerated() {
         if model.id == circleNodeModel.id {
           presentedCircleNodeModels[index] = circleNodeModel
-          presentedRankingNodeView[index].viewModel.setLineModel(circleNodeModel)
+          presentedRankingNodeView[index].viewModel.setCircleNodeModel(circleNodeModel)
           break
         }
       }
