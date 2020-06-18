@@ -90,7 +90,7 @@ extension RankingNodeView {
     let layer = CALayer()
     layer.contents = teamLogo?.cgImage
     layoutIfNeeded()
-    layer.contentsGravity = .resizeAspect
+    layer.contentsGravity = .resizeAspectFill
     layer.isGeometryFlipped = true
     layer.borderColor = UIColor.white.cgColor
     layer.borderWidth = 5.0
