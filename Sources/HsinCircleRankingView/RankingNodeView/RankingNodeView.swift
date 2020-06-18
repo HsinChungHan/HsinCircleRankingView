@@ -39,7 +39,7 @@ class RankingNodeView: UIView {
   weak var dataSource: RankingNodeViewDataSource?
   weak var delegate: RankingNodeViewDelegate?
   lazy var imageLayer = makeImageLayer()
-  lazy var backgroundImageLayer = makeImageLayer()
+  lazy var backgroundImageLayer = makeBackgroundImageLayer()
   lazy var viewModel = makeViewModel()
   
   //MARK: - View lifeCycle
@@ -49,7 +49,7 @@ class RankingNodeView: UIView {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
     let width = dataSource.rankingNodeViewWidth(self)
-    [backgroundImageLayer].forEach {
+    [backgroundImageLayer, imageLayer].forEach {
       layer.addSublayer($0)
       layer.backgroundColor = UIColor.clear.cgColor
       $0.frame = CGRect(x: 0, y: 0, width: width, height: width)
