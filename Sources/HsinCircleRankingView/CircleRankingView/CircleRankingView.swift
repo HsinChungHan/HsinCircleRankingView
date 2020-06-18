@@ -24,6 +24,7 @@ public protocol CircleRankingViewDataSource: AnyObject {
   func circleRankingViewRoundDouration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewRankingNodeViewBackgroundColor(_ circleRankingView: CircleRankingView) -> UIColor
   func circleRankingViewBackgroundImage(_ circleRankingView: CircleRankingView) -> UIImage
+  func circleRankingViewBackgroundViewContentmode(_ circleRankingView: CircleRankingView) -> UIView.ContentMode
   func circleRankingViewBlurEffectStyle(_ circleRankingView: CircleRankingView) -> UIBlurEffect.Style
 }
 
@@ -85,8 +86,9 @@ extension CircleRankingView {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
     let backgroundImage = dataSource.circleRankingViewBackgroundImage(self)
+    let contentMode = dataSource.circleRankingViewBackgroundViewContentmode(self)
     let imv = UIImageView()
-    imv.contentMode = .scaleAspectFill
+    imv.contentMode = contentMode
     imv.image = backgroundImage
     imv.clipsToBounds = true
     return imv
