@@ -49,7 +49,7 @@ class RankingNodeView: UIView {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
     let width = dataSource.rankingNodeViewWidth(self)
-    [backgroundImageLayer, imageLayer].forEach {
+    [backgroundImageLayer].forEach {
       layer.addSublayer($0)
       layer.backgroundColor = UIColor.clear.cgColor
       $0.frame = CGRect(x: 0, y: 0, width: width, height: width)
