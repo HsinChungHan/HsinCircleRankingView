@@ -108,17 +108,25 @@ extension CircleRankingView {
       $0.fireRnakingOrderAnimation()
     }
     
-    //放 player headshot
     let foregroundNodeView = makeRankingNodeView(type: .foreground)
-    let backgroundNodeView = makeRankingNodeView(type: .background)
-    addSubview(backgroundNodeView)
-    addSubview(foregroundNodeView)
-    let width = dataSource.circleRankingViewRankingNodeViewWidth(self)
-    foregroundNodeView.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: nil, padding: .init(top: 0, left: 10, bottom: 20, right: 0), size: .init(width: width, height: width))
-    backgroundNodeView.anchor(top: nil, bottom: bottomAnchor, leading: nil, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 20, right: 10), size: .init(width: width, height: width))
-//    nodeView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-    foregroundNodeView.fireAnimation()
-    backgroundNodeView.fireAnimation()
+    if let _ = viewModel.currentCircleNodeModel?.teamLogo {
+      
+      let backgroundNodeView = makeRankingNodeView(type: .background)
+      addSubview(backgroundNodeView)
+      addSubview(foregroundNodeView)
+      let width = dataSource.circleRankingViewRankingNodeViewWidth(self)
+      foregroundNodeView.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: nil, padding: .init(top: 0, left: 10, bottom: 20, right: 0), size: .init(width: width, height: width))
+      backgroundNodeView.anchor(top: nil, bottom: bottomAnchor, leading: nil, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 20, right: 10), size: .init(width: width, height: width))
+      foregroundNodeView.fireAnimation()
+      backgroundNodeView.fireAnimation()
+    }else {
+      addSubview(foregroundNodeView)
+      let width = dataSource.circleRankingViewRankingNodeViewWidth(self)
+      foregroundNodeView.anchor(top: nil, bottom: bottomAnchor, leading: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 20, right: 0), size: .init(width: width, height: width))
+      foregroundNodeView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+      foregroundNodeView.fireAnimation()
+    }
+    
     
     //這邊要判斷這個 nodeView 是否已經出現過，若已經出現過，則在做完 scaleAndTransation 的動畫要把自己移除。否則就保留，並加入到 presentedLineModels 和 presentedRankingNodeView
     if viewModel.isCurrentLineModelAlreadyExistInPresentedCircleNodeModels {
