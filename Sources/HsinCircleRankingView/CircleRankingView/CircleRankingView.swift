@@ -23,6 +23,7 @@ public protocol CircleRankingViewDataSource: AnyObject {
   func circleRankingViewPadding(_ circleRankingView: CircleRankingView) -> CGFloat
   func circleRankingViewRoundDouration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewRankingNodeViewBackgroundColor(_ circleRankingView: CircleRankingView) -> UIColor
+  func circleRankingViewBackgroundImage(_ circleRankingView: CircleRankingView) -> UIImage
 }
 
 //MARK: - CircleRankingViewDelegate
@@ -44,12 +45,20 @@ public class CircleRankingView: UIView {
   public weak var dataSource: CircleRankingViewDataSource?
   public weak var delegate: CircleRankingViewDelegate?
   lazy var viewModel = makeViewModel()
+  lazy var backgrounImageView = makeBackgrounImageView()
+  lazy var blurEffectView = makeVisualEffectView()
   var timer: Timer?
   
   //MARK: - View lifeCycle
   
   override public func draw(_ rect: CGRect) {
     super.draw(rect)
+    addSubview(backgrounImageView)
+    backgrounImageView.fillSuperView()
+    layoutIfNeeded()
+    blurEffectView.frame = backgrounImageView.bounds
+    backgrounImageView.addSubview(blurEffectView)
+    
     timer = makeTimer()
     RunLoop.current.add(timer!, forMode: .common)
   }
@@ -58,6 +67,25 @@ public class CircleRankingView: UIView {
 //MARK: - Lazy initialization
 
 extension CircleRankingView {
+  
+  fileprivate func makeVisualEffectView() -> UIVisualEffectView {
+    let blurEffect = UIBlurEffect(style: .dark)
+    let blurEffectView = UIVisualEffectView(effect: blurEffect)
+    blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    return blurEffectView
+  }
+  
+  fileprivate func makeBackgrounImageView() -> UIImageView {
+    guard let dataSource = dataSource else {
+      fatalError("🚨 You have to set dataSource for RankingNodeView first")
+    }
+    let backgroundImage = dataSource.circleRankingViewBackgroundImage(self)
+    let imv = UIImageView()
+    imv.contentMode = .scaleAspectFill
+    imv.image = backgroundImage
+    imv.clipsToBounds = true
+    return imv
+  }
   
   func makeRankingNodeView(type: NodeType) -> RankingNodeView {
     let view = RankingNodeView(nodeType: type)
@@ -70,7 +98,6 @@ extension CircleRankingView {
     guard let dataSource = dataSource else {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
-    
     
     let lineModelTuples = dataSource.circleRankingViewLineModels(self)
     var lineModels = [CircleNodeModel]()
