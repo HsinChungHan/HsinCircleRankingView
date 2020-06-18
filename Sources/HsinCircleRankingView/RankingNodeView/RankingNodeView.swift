@@ -285,7 +285,7 @@ extension RankingNodeView: CAAnimationDelegate {
   
   func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
     let groupId = anim.value(forKey: "groupId") as! String
-    print("groupId: \(groupId)")
+    
     if groupId == "\(nodeType.rawValue)OpacityGroup" {
       //TODO: - 未來應該要從外面傳入是否有 background node view 的存在
       //yes => 做 makeXTransationGroup() 的動畫

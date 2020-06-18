@@ -24,6 +24,7 @@ public protocol CircleRankingViewDataSource: AnyObject {
   func circleRankingViewRoundDouration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewRankingNodeViewBackgroundColor(_ circleRankingView: CircleRankingView) -> UIColor
   func circleRankingViewBackgroundImage(_ circleRankingView: CircleRankingView) -> UIImage
+  func circleRankingViewBlurEffectStyle(_ circleRankingView: CircleRankingView) -> UIBlurEffect.Style
 }
 
 //MARK: - CircleRankingViewDelegate
@@ -69,7 +70,11 @@ public class CircleRankingView: UIView {
 extension CircleRankingView {
   
   fileprivate func makeVisualEffectView() -> UIVisualEffectView {
-    let blurEffect = UIBlurEffect(style: .dark)
+    guard let dataSource = dataSource else {
+      fatalError("🚨 You have to set dataSource for RankingNodeView first")
+    }
+    let effectStyle = dataSource.circleRankingViewBlurEffectStyle(self)
+    let blurEffect = UIBlurEffect(style: effectStyle)
     let blurEffectView = UIVisualEffectView(effect: blurEffect)
     blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     return blurEffectView
