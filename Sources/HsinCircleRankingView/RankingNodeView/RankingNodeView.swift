@@ -18,7 +18,7 @@ protocol RankingNodeViewDataSource: AnyObject {
   func rankingNodeViewOpacityDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval
   func rankingNodeViewTotalDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval
   func rankingNodeViewScale(_ rankingNodeView: RankingNodeView) -> CGFloat
-  func rankingNodeViewLineModel(_ rankingNodeView: RankingNodeView) -> LineModel
+  func rankingNodeViewLineModel(_ rankingNodeView: RankingNodeView) -> CircleNodeModel
   func rankingNodeViewMidX(_ rankingNodeView: RankingNodeView) -> CGFloat
   func rankingNodeViewMidY(_ rankingNodeView: RankingNodeView) -> CGFloat
   func rankingNodeViewPadding(_ rankingNodeView: RankingNodeView) -> CGFloat

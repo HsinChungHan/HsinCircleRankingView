@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class LineModel {
+public class CircleNodeModel {
   
   private(set) var id: String
   private(set) var rank: Int = 999
@@ -28,15 +28,15 @@ public class LineModel {
   }
 }
 
-extension LineModel: Comparable {
-  public static func == (lhs: LineModel, rhs: LineModel) -> Bool {
+extension CircleNodeModel: Comparable {
+  public static func == (lhs: CircleNodeModel, rhs: CircleNodeModel) -> Bool {
     if lhs.value == rhs.value {
       return true
     }
     return false
   }
   
-  public static func < (lhs: LineModel, rhs: LineModel) -> Bool {
+  public static func < (lhs: CircleNodeModel, rhs: CircleNodeModel) -> Bool {
     if lhs.value < rhs.value {
       return true
     }

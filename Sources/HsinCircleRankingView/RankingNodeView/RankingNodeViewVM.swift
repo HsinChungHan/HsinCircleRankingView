@@ -9,7 +9,7 @@
 import UIKit
 
 class RankingNodeViewVM {
-  private(set) var lineModel: LineModel
+  private(set) var lineModel: CircleNodeModel
   let scaleWidth: CGFloat
   let numberOfRows: Int
   let padding: CGFloat
@@ -48,7 +48,7 @@ class RankingNodeViewVM {
   }
   
   
-  init(lineModel: LineModel, numberOfItems: Int, scaleWidth: CGFloat, xFromValue: CGFloat, yFromValue: CGFloat, padding: CGFloat) {
+  init(lineModel: CircleNodeModel, numberOfItems: Int, scaleWidth: CGFloat, xFromValue: CGFloat, yFromValue: CGFloat, padding: CGFloat) {
     self.lineModel = lineModel
     self.rank = lineModel.rank
     self.scaleWidth = scaleWidth
@@ -67,7 +67,7 @@ class RankingNodeViewVM {
     self.rank = rank
   }
   
-  func setLineModel(_ lineModel: LineModel) {
+  func setLineModel(_ lineModel: CircleNodeModel) {
     self.lineModel = lineModel
   }
 }

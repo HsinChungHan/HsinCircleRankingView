@@ -71,15 +71,15 @@ extension CircleRankingView {
     
     
     let lineModelTuples = dataSource.circleRankingViewLineModels(self)
-    var lineModels = [LineModel]()
+    var lineModels = [CircleNodeModel]()
     for tuple in lineModelTuples {
       if let teamLogo = tuple.teamLogo {
         print("teamLogo is \(teamLogo)")
-        let lineModel = LineModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: UIImage(named: teamLogo)!)
-        lineModels.append(lineModel)
+        let circleNodeModel = CircleNodeModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: UIImage(named: teamLogo)!)
+        lineModels.append(circleNodeModel)
       }else {
-        let lineModel = LineModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: nil)
-        lineModels.append(lineModel)
+        let circleNodeModel = CircleNodeModel(id: tuple.id, value: tuple.value, icon: UIImage(named: tuple.icon)!, teamLogo: nil)
+        lineModels.append(circleNodeModel)
       }
       
     }
@@ -97,12 +97,12 @@ extension CircleRankingView {
   }
   
   @objc func onTimerFires(sender: Timer) {
-    guard let lineModel = viewModel.lineModelsPopLast(), let dataSource = dataSource else {
+    guard let circleNodeModel = viewModel.lineModelsPopLast(), let dataSource = dataSource else {
       invalidateTimer()
       return
     }
     //TODO: - 未來要在這邊把 rank 確定起來
-    viewModel.updatePresentedRank(currentLineModel: lineModel)
+    viewModel.updatePresentedRank(circleNodeModel: circleNodeModel)
     viewModel.presentedRankingNodeView.forEach {
       $0.doTransationAnimation()
     }
@@ -115,11 +115,11 @@ extension CircleRankingView {
     nodeView.doOpacityAnimation()
     
     //這邊要判斷這個 nodeView 是否已經出現過，若已經出現過，則在做完 scaleAndTransation 的動畫要把自己移除。否則就保留，並加入到 presentedLineModels 和 presentedRankingNodeView
-    if viewModel.isCurrentLineModelAlreadyExistInPresentedLineModels {
+    if viewModel.isCurrentLineModelAlreadyExistInPresentedCircleNodeModels {
       viewModel.willRemoveCurrentNodeView()
     }else {
       viewModel.wontRemoveCurrentNodeView()
-      viewModel.appendInPresentedLineModels(lineModel: lineModel)
+      viewModel.appendInPresentedCircleNodeModels(circleNodeModel: circleNodeModel)
       viewModel.appendInPresentedRankingNodeViews(rankingNodeView: nodeView)
     }
   }
@@ -184,9 +184,9 @@ extension CircleRankingView: RankingNodeViewDataSource {
     return scale
   }
   
-  func rankingNodeViewLineModel(_ rankingNodeView: RankingNodeView) -> LineModel {
+  func rankingNodeViewLineModel(_ rankingNodeView: RankingNodeView) -> CircleNodeModel {
     //TODO: - 之後設計 currentLineModel 為 nil 的狀況
-    return viewModel.currentLineModel ?? LineModel(id: "", value: 99999, icon: UIImage(), teamLogo: nil)
+    return viewModel.currentCircleNodeModel ?? CircleNodeModel(id: "", value: 99999, icon: UIImage(), teamLogo: nil)
   }
   
   func rankingNodeViewMidX(_ rankingNodeView: RankingNodeView) -> CGFloat {

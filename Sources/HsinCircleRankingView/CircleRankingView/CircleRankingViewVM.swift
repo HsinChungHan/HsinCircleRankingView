@@ -10,17 +10,17 @@ import Foundation
 
 class CircleRankingViewVM {
   //MARK: - Properties
-  private(set)var rawDataLineModels: [LineModel]
-  private(set) var presentedLineModels = [LineModel]()
+  private(set)var rawDataCircleNodeModels: [CircleNodeModel]
+  private(set) var presentedCircleNodeModels = [CircleNodeModel]()
   private(set) var presentedRankingNodeView = [RankingNodeView]()
-  private(set) var currentLineModel: LineModel?
+  private(set) var currentCircleNodeModel: CircleNodeModel?
   
   private(set) var isRemovedCurrentNodeView: Bool = false
   
-  var isCurrentLineModelAlreadyExistInPresentedLineModels: Bool {
-    if let currentLineModel = currentLineModel {
-      for lineModel in presentedLineModels {
-        if lineModel.id == currentLineModel.id {
+  var isCurrentLineModelAlreadyExistInPresentedCircleNodeModels: Bool {
+    if let currentCircleNodeModel = currentCircleNodeModel {
+      for circleNodeModel in presentedCircleNodeModels {
+        if circleNodeModel.id == currentCircleNodeModel.id {
           return true
         }
       }
@@ -28,10 +28,10 @@ class CircleRankingViewVM {
     return false
   }
   
-  var currentPresentedLineModel: LineModel? {
-    if let currentLineModel = currentLineModel {
-      for model in presentedLineModels {
-        if currentLineModel.id == model.id {
+  var currentPresentedCircleNodeModel: CircleNodeModel? {
+    if let currentCircleNodeModel = currentCircleNodeModel {
+      for model in presentedCircleNodeModels {
+        if currentCircleNodeModel.id == model.id {
           return model
         }
       }
@@ -40,9 +40,9 @@ class CircleRankingViewVM {
   }
   
   var currentPresentedRankingNodeView: RankingNodeView? {
-    if let currentLineModel = currentLineModel {
+    if let currentCircleNodeModel = currentCircleNodeModel {
       for view in presentedRankingNodeView {
-        if view.viewModel.id == currentLineModel.id {
+        if view.viewModel.id == currentCircleNodeModel.id {
           return view
         }
       }
@@ -50,48 +50,48 @@ class CircleRankingViewVM {
     return nil
   }
   
-  init(rawDataLineModels: [LineModel]) {
-    self.rawDataLineModels = rawDataLineModels
+  init(rawDataLineModels: [CircleNodeModel]) {
+    self.rawDataCircleNodeModels = rawDataLineModels
   }
   
   //MARK: - Intrnal functions
-  func lineModelsPopLast() -> LineModel? {
-    guard let lineModel = rawDataLineModels.popLast() else {
+  func lineModelsPopLast() -> CircleNodeModel? {
+    guard let circleNodeModel = rawDataCircleNodeModels.popLast() else {
       return nil
     }
-    currentLineModel = lineModel
-    return lineModel
+    currentCircleNodeModel = circleNodeModel
+    return circleNodeModel
   }
   
-  func appendInPresentedLineModels(lineModel: LineModel) {
-    presentedLineModels.append(lineModel)
+  func appendInPresentedCircleNodeModels(circleNodeModel: CircleNodeModel) {
+    presentedCircleNodeModels.append(circleNodeModel)
   }
   
   func appendInPresentedRankingNodeViews(rankingNodeView: RankingNodeView) {
     presentedRankingNodeView.append(rankingNodeView)
   }
   
-  func updatePresentedRank(currentLineModel: LineModel) {
+  func updatePresentedRank(circleNodeModel: CircleNodeModel) {
     
-    var newPresentedLineModels: [LineModel]
+    var newPresentedCircleNodeModels: [CircleNodeModel]
     
     //若 currentPresentedRankingNodeView 前面已經出現過了，就去更新 presentedLineModels 和 presentedRankingNodeView 所儲存的 lineModel
-    if isCurrentLineModelAlreadyExistInPresentedLineModels {
-      for (index, model) in presentedLineModels.enumerated() {
-        if model.id == currentLineModel.id {
-          presentedLineModels[index] = currentLineModel
-          presentedRankingNodeView[index].viewModel.setLineModel(currentLineModel)
+    if isCurrentLineModelAlreadyExistInPresentedCircleNodeModels {
+      for (index, model) in presentedCircleNodeModels.enumerated() {
+        if model.id == circleNodeModel.id {
+          presentedCircleNodeModels[index] = circleNodeModel
+          presentedRankingNodeView[index].viewModel.setLineModel(circleNodeModel)
           break
         }
       }
-      newPresentedLineModels = presentedLineModels
+      newPresentedCircleNodeModels = presentedCircleNodeModels
     }else {
-      newPresentedLineModels = presentedLineModels
-      newPresentedLineModels.append(currentLineModel)
+      newPresentedCircleNodeModels = presentedCircleNodeModels
+      newPresentedCircleNodeModels.append(circleNodeModel)
     }
     
     //找到排序過後的 PresentedLineModels
-    let sortedNewPresentedLineModels = Heap(sort: <, elements: newPresentedLineModels).heapSorted()
+    let sortedNewPresentedLineModels = Heap(sort: <, elements: newPresentedCircleNodeModels).heapSorted()
     //將排序過後的 PresentedLineModels，利用 index 更新成新的 rank
     for (index, _) in sortedNewPresentedLineModels.enumerated() {
       sortedNewPresentedLineModels[index].setRank(index)
@@ -99,13 +99,13 @@ class CircleRankingViewVM {
     
     //最後去更新 currentLineModel, presentedLineModels, presentedRankingNodeView 的 rank
     for (newModelIndex, newModel) in sortedNewPresentedLineModels.enumerated() {
-      if newModel.id == currentLineModel.id {
-        self.currentLineModel?.setRank(newModelIndex)
+      if newModel.id == circleNodeModel.id {
+        self.currentCircleNodeModel?.setRank(newModelIndex)
       }
       
-      for (modelIndex, model) in presentedLineModels.enumerated() {
+      for (modelIndex, model) in presentedCircleNodeModels.enumerated() {
         if model.id == newModel.id {
-          presentedLineModels[modelIndex].setRank(newModel.rank)
+          presentedCircleNodeModels[modelIndex].setRank(newModel.rank)
           presentedRankingNodeView[modelIndex].viewModel.setRank(newModel.rank)
           break
         }
