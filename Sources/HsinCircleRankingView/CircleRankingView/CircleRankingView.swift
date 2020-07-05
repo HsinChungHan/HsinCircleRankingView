@@ -60,6 +60,7 @@ public class CircleRankingView: UIView {
     layoutIfNeeded()
     blurEffectView.frame = backgrounImageView.bounds
     backgrounImageView.addSubview(blurEffectView)
+    clipsToBounds = true
   }
 }
 
