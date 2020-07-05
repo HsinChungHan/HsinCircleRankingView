@@ -60,9 +60,6 @@ public class CircleRankingView: UIView {
     layoutIfNeeded()
     blurEffectView.frame = backgrounImageView.bounds
     backgrounImageView.addSubview(blurEffectView)
-    
-    timer = makeTimer()
-    RunLoop.current.add(timer!, forMode: .common)
   }
 }
 
@@ -120,6 +117,11 @@ extension CircleRankingView {
     }
     let vm = CircleRankingViewVM(rawDataLineModels: lineModels)
     return vm
+  }
+  
+  public func launch() {
+    timer = makeTimer()
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func makeTimer() -> Timer {
