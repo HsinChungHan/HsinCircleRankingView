@@ -11,6 +11,13 @@ import UIKit
 //MARK: - RankingNodeViewDataSource
 
 extension CircleRankingView: RankingNodeViewDataSource {
+  func rankingNodeViewStayedDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval {
+    guard let dataSource = dataSource else {
+      fatalError("🚨 You have to set dataSource for RankingNodeView first")
+    }
+    return dataSource.circleRankingViewStayedDuration(self)
+  }
+  
   func rankingNodeViewBackgroundColor(_ rankingNodeView: RankingNodeView) -> UIColor {
     guard let dataSource = dataSource else {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")

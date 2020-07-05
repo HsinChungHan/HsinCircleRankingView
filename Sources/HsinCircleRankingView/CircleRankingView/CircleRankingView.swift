@@ -16,6 +16,7 @@ public protocol CircleRankingViewDataSource: AnyObject {
   func circleRankingViewNumberOfItemInRows(_ circleRankingView: CircleRankingView) -> Int
   func circleRankingViewRankingNodeViewWidth(_ circleRankingView: CircleRankingView) -> CGFloat
   func circleRankingViewOpacityDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
+  func circleRankingViewStayedDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewNodeViewXTransationToMidXDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewTotalDuration(_ circleRankingView: CircleRankingView) -> TimeInterval
   func circleRankingViewScale(_ circleRankingView: CircleRankingView) -> CGFloat

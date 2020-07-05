@@ -28,6 +28,7 @@ protocol RankingNodeViewDataSource: AnyObject {
   func rankingNodeViewOpacityDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval
   func rankingNodeViewXTransationToCircleRankingViewMidXDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval
   func rankingNodeViewTotalDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval
+  func rankingNodeViewStayedDuration(_ rankingNodeView: RankingNodeView) -> TimeInterval
   func rankingNodeViewScale(_ rankingNodeView: RankingNodeView) -> CGFloat
   func rankingNodeViewCircleNodelModel(_ rankingNodeView: RankingNodeView) -> CircleNodeModel
   func rankingNodeViewMidX(_ rankingNodeView: RankingNodeView) -> CGFloat
@@ -250,8 +251,9 @@ extension RankingNodeView {
     let scale = dataSource.rankingNodeViewScale(self)
     let totalDuration = dataSource.rankingNodeViewTotalDuration(self)
     let opacityDuration = dataSource.rankingNodeViewOpacityDuration(self)
+    let stayedDuration = dataSource.rankingNodeViewStayedDuration(self)
     let xTransationDuration = dataSource.rankingNodeViewXTransationToCircleRankingViewMidXDuration(self)
-    let animationDuration = totalDuration - opacityDuration - xTransationDuration
+    let animationDuration = totalDuration - opacityDuration - xTransationDuration - stayedDuration
     let convertedOriginPoint = convert(CGPoint(x: 0, y: 0), to: superview)
     let xTransation = makeXTransation(fromValue: viewModel.xRankingOrderFromValue, toValue: viewModel.xRankingOrderToValue - convertedOriginPoint.x)
     let yTransation = makeYTransation(fromValue: viewModel.yRankingOrderFromValue, toValue: viewModel.yRankingOrderToValue - convertedOriginPoint.y)
