@@ -268,10 +268,10 @@ extension RankingNodeView {
     guard let dataSource = dataSource else {
       fatalError("🚨 You have to set dataSource for RankingNodeView first")
     }
-    let totalDuration = dataSource.rankingNodeViewTotalDuration(self)
-    let opacityDuration = dataSource.rankingNodeViewOpacityDuration(self)
-    let xTransationDuration = dataSource.rankingNodeViewXTransationToCircleRankingViewMidXDuration(self)
-    let animationDuration = opacityDuration
+//    let totalDuration = dataSource.rankingNodeViewTotalDuration(self)
+//    let opacityDuration = dataSource.rankingNodeViewOpacityDuration(self)
+//    let xTransationDuration = dataSource.rankingNodeViewXTransationToCircleRankingViewMidXDuration(self)
+    let animationDuration = 1.0
     let convertedOriginPoint = convert(CGPoint(x: 0, y: 0), to: superview)
     let xTransation = makeXTransation(fromValue: viewModel.xRankingOrderFromValue - convertedOriginPoint.x, toValue: viewModel.xRankingOrderToValue - convertedOriginPoint.x)
     let yTransation = makeYTransation(fromValue: viewModel.yRankingOrderFromValue - convertedOriginPoint.y, toValue: viewModel.yRankingOrderToValue - convertedOriginPoint.y)
