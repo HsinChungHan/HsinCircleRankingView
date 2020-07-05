@@ -271,7 +271,7 @@ extension RankingNodeView {
     let totalDuration = dataSource.rankingNodeViewTotalDuration(self)
     let opacityDuration = dataSource.rankingNodeViewOpacityDuration(self)
     let xTransationDuration = dataSource.rankingNodeViewXTransationToCircleRankingViewMidXDuration(self)
-    let animationDuration = totalDuration - opacityDuration - xTransationDuration
+    let animationDuration = opacityDuration
     let convertedOriginPoint = convert(CGPoint(x: 0, y: 0), to: superview)
     let xTransation = makeXTransation(fromValue: viewModel.xRankingOrderFromValue - convertedOriginPoint.x, toValue: viewModel.xRankingOrderToValue - convertedOriginPoint.x)
     let yTransation = makeYTransation(fromValue: viewModel.yRankingOrderFromValue - convertedOriginPoint.y, toValue: viewModel.yRankingOrderToValue - convertedOriginPoint.y)
